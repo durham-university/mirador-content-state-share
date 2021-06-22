@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/ShareSharp';
 import { getManifestoInstance } from 'mirador/dist/es/src/state/selectors/manifests';
 import * as actions from 'mirador/dist/es/src/state/actions';
+import MiradorMenuButton from 'mirador/dist/es/src/containers/MiradorMenuButton';
 
 const mapDispatchToProps = (dispatch, props) => ({
   addCompanionWindow: (content, additionalProps) => dispatch(
-    actions.addCompanionWindow(props.targetProps.windowId, { content, ...additionalProps }),
+    actions.addCompanionWindow(props.windowId, { content, ...additionalProps }),
   )
 });
 
@@ -33,35 +35,33 @@ class ContentStateShareComponent extends Component {
     const { openShareCompanionWindow, handleClose } = this.props;
 
     openShareCompanionWindow();
-    handleClose();
+//    handleClose();
   }
 
   render() {
     return (
-      <MenuItem onClick={this.openContentStateShareCompanionWindow}>
-        <ListItemIcon>
+        <MiradorMenuButton aria-label="Share" onClick={() => this.openContentStateShareCompanionWindow()}>
           <ShareIcon />
-        </ListItemIcon>
-        <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-          Share
-        </ListItemText>
-      </MenuItem>
+        </MiradorMenuButton>
     );
   }
 }
 
-//ContentStateShareComponent.propTypes = {
-//  addCompanionWindow: PropTypes.func.isRequired,
+
+ContentStateShareComponent.propTypes = {
+  addCompanionWindow: PropTypes.func.isRequired,
 //  handleClose: PropTypes.func.isRequired,
-//};
+};
 
 
 export default {
-  target: 'WindowTopBarPluginMenu',
-  mode: 'wrap', // TODO: this should be add but causes strange problems
+  target: 'WindowTopBarPluginArea',
+  mode: 'add',
   name: 'ContentStateSharePlugin',
   component: ContentStateShareComponent,
   mapDispatchToProps,
   mapStateToProps,
-  reducers: {},
+  reducers: {
+    dummy: (state = {}, action) => { return state; }
+  },
 };
